@@ -1,5 +1,6 @@
-package com.example.volumescreencontrol
+package com.example.volumepowerapp
 
+import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
 import android.provider.Settings
@@ -8,7 +9,8 @@ import android.widget.LinearLayout
 import android.widget.TextView
 import android.view.Gravity
 
-class MainActivity : android.app.Activity() {
+class MainActivity : Activity() {
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -25,7 +27,13 @@ class MainActivity : android.app.Activity() {
         }
 
         val info = TextView(this).apply {
-            text = "Enable the Accessibility Service below.\n\nVolume Up = wake screen\nVolume Down = turn screen off"
+            text = """
+                Enable the Accessibility Service below.
+
+                Volume Up = Wake Screen
+                Volume Down = Turn Screen Off
+            """.trimIndent()
+
             textSize = 16f
             gravity = Gravity.CENTER
             setPadding(0, 24, 0, 24)
@@ -33,14 +41,29 @@ class MainActivity : android.app.Activity() {
 
         val button = Button(this).apply {
             text = "Open Accessibility Settings"
+
             setOnClickListener {
-                startActivity(Intent(Settings.ACTION_ACCESSIBILITY_SETTINGS))
+                startActivity(
+                    Intent(Settings.ACTION_ACCESSIBILITY_SETTINGS)
+                )
+            }
+        }
+
+        val aboutButton = Button(this).apply {
+            text = "About Developer"
+
+            setOnClickListener {
+                startActivity(
+                    Intent(this@MainActivity, AboutActivity::class.java)
+                )
             }
         }
 
         layout.addView(title)
         layout.addView(info)
         layout.addView(button)
+        layout.addView(aboutButton)
+
         setContentView(layout)
     }
 }
