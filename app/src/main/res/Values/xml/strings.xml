@@ -1,4 +1,0 @@
-<resources>
-    <string name="app_name">Volume Screen Control</string>
-    <string name="accessibility_description">Uses volume-button presses to control the screen.</string>
-</resources>
