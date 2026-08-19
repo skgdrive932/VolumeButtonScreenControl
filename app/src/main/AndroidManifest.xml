@@ -3,11 +3,11 @@
 
     <application
         android:allowBackup="true"
-        android:icon="@android:drawable/ic_menu_compass"
+        android:icon="@drawable/ic_power"
         android:label="Volume Screen Control"
         android:theme="@style/Theme.AppCompat.Light.DarkActionBar">
 
-        <!-- Main Activity -->
+        <!-- Main Screen -->
         <activity
             android:name=".MainActivity"
             android:exported="true">
@@ -17,7 +17,7 @@
             </intent-filter>
         </activity>
 
-        <!-- About Activity -->
+        <!-- About Developer Screen -->
         <activity android:name=".AboutActivity" />
 
         <!-- Accessibility Service -->
