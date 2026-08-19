@@ -1,45 +1,41 @@
 <?xml version="1.0" encoding="utf-8"?>
-
 <manifest xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <!-- Screen ON karne ke liye zaroori permissions -->
+    <uses-permission android:name="android.permission.WAKE_LOCK" />
+    <uses-permission android:name="android.permission.DISABLE_KEYGUARD" />
 
     <application
         android:allowBackup="true"
         android:icon="@drawable/ic_power"
-        android:label="@string/app_name"
-        android:theme="@style/Theme.VolumeButtonScreenControl">
+        android:label="Volume Screen Control"
+        android:theme="@style/Theme.AppCompat.Light.DarkActionBar">
 
-        <!-- Main Activity -->
+        <!-- Main Screen -->
         <activity
             android:name=".MainActivity"
             android:exported="true">
-
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
-
         </activity>
 
-        <!-- About Activity -->
-        <activity
-            android:name=".AboutActivity"
-            android:exported="false" />
+        <!-- About Developer Screen -->
+        <activity android:name=".AboutActivity" />
 
         <!-- Accessibility Service -->
         <service
-            android:name=".VolumeAccessibilityService"
+            android:name=".VolumeScreenService"
             android:permission="android.permission.BIND_ACCESSIBILITY_SERVICE"
             android:exported="true">
-
             <intent-filter>
-                <action
-                    android:name="android.accessibilityservice.AccessibilityService" />
+                <action android:name="android.accessibilityservice.AccessibilityService" />
             </intent-filter>
 
             <meta-data
                 android:name="android.accessibilityservice"
                 android:resource="@xml/accessibility_service_config" />
-
         </service>
 
     </application>
