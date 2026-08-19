@@ -1,45 +1,52 @@
-package com.example.volumescreencontrol
+package com.example.volumepowerapp
 
 import android.accessibilityservice.AccessibilityService
+import android.content.Context
+import android.os.PowerManager
 import android.view.KeyEvent
 import android.view.accessibility.AccessibilityEvent
-import android.os.PowerManager
-import android.content.Context
-import android.os.Build
 
 class VolumeAccessibilityService : AccessibilityService() {
 
-    private var lastVolumeKeyTime = 0L
-    private val debounceMs = 350L
+    override fun onAccessibilityEvent(event: AccessibilityEvent?) {
+        // Accessibility events handle karne ke liye
+    }
 
-    override fun onAccessibilityEvent(event: AccessibilityEvent?) = Unit
+    override fun onInterrupt() {
+        // Service interrupt hone par
+    }
 
-    override fun onInterrupt() = Unit
+    override fun onKeyEvent(event: KeyEvent?): Boolean {
+        if (event == null) return super.onKeyEvent(event)
 
-    override fun onKeyEvent(event: KeyEvent): Boolean {
-        if (event.action != KeyEvent.ACTION_DOWN) return false
+        val action = event.action
+        val keyCode = event.keyCode
 
-        val now = System.currentTimeMillis()
-        if (now - lastVolumeKeyTime < debounceMs) return false
-        lastVolumeKeyTime = now
-
-        val power = getSystemService(Context.POWER_SERVICE) as PowerManager
-
-        when (event.keyCode) {
-            KeyEvent.KEYCODE_VOLUME_UP -> {
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O_MR1) {
-                    power.wakeUp(now)
-                    return true
+        // Volume Key press hone par Screen Control Handle karein
+        if (action == KeyEvent.ACTION_DOWN) {
+            when (keyCode) {
+                KeyEvent.KEYCODE_VOLUME_UP, KeyEvent.KEYCODE_VOLUME_DOWN -> {
+                    toggleScreen()
+                    return true // Key press consume kar li gayi
                 }
             }
-            KeyEvent.KEYCODE_VOLUME_DOWN -> {
-                // Android does not allow a normal third-party app to force-lock
-                // the device without device-admin/accessibility privileges.
-                // AccessibilityService can perform the global lock action.
-                performGlobalAction(GLOBAL_ACTION_LOCK_SCREEN)
-                return true
-            }
         }
-        return false
+        return super.onKeyEvent(event)
+    }
+
+    private fun toggleScreen() {
+        val powerManager = getSystemService(Context.POWER_SERVICE) as PowerManager
+        
+        if (!powerManager.isInteractive) {
+            // Screen Off hai, toh turn ON karein (WakeUp fix)
+            val wakeLock = powerManager.newWakeLock(
+                PowerManager.SCREEN_BRIGHT_WAKE_LOCK or PowerManager.ACQUIRE_CAUSES_WAKEUP,
+                "VolumeScreenControl:WakeLock"
+            )
+            wakeLock.acquire(3000) // 3 seconds ke liye Screen ON
+        } else {
+            // Screen ON hai, toh turn OFF (Lock) karein
+            performGlobalAction(GLOBAL_ACTION_LOCK_SCREEN)
+        }
     }
 }
