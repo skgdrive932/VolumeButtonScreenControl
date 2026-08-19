@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.example.volumepowerapp">
+<manifest xmlns:android="http://schemas.android.com/apk/res/android">
 
     <application
         android:allowBackup="true"
@@ -8,7 +7,7 @@
         android:label="Volume Screen Control"
         android:theme="@style/Theme.AppCompat.Light.DarkActionBar">
 
-        <!-- Main Activity (App ki screen) -->
+        <!-- Main Activity -->
         <activity
             android:name=".MainActivity"
             android:exported="true">
@@ -18,10 +17,10 @@
             </intent-filter>
         </activity>
 
-        <!-- About Activity (Jo aapne abhi banayi hai) -->
+        <!-- About Activity -->
         <activity android:name=".AboutActivity" />
 
-        <!-- Accessibility Service (Jo screen control karti hai) -->
+        <!-- Accessibility Service -->
         <service
             android:name=".VolumeScreenService"
             android:permission="android.permission.BIND_ACCESSIBILITY_SERVICE"
