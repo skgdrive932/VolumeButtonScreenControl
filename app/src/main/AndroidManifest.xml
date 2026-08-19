@@ -24,9 +24,9 @@
         <!-- About Developer Screen -->
         <activity android:name=".AboutActivity" />
 
-        <!-- Accessibility Service -->
+        <!-- Accessibility Service (Updated Name) -->
         <service
-            android:name=".VolumeScreenService"
+            android:name=".VolumeAccessibilityService"
             android:permission="android.permission.BIND_ACCESSIBILITY_SERVICE"
             android:exported="true">
             <intent-filter>
