@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Base Application Theme -->
+    <style name="Theme.AppCompat.Light.DarkActionBar" parent="Base.Theme.AppCompat.Light.DarkActionBar">
+        <!-- Primary brand color -->
+        <item name="colorPrimary">#1E88E5</item>
+        <item name="colorPrimaryDark">#1565C0</item>
+        <item name="colorAccent">#00BCD4</item>
+    </style>
+
+    <!-- App Main Theme Reference -->
+    <style name="Theme.VolumeButtonScreenControl" parent="Theme.AppCompat.Light.DarkActionBar">
+        <!-- Customize your theme here -->
+    </style>
+</resources>
