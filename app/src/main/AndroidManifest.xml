@@ -1,37 +1,45 @@
 <?xml version="1.0" encoding="utf-8"?>
+
 <manifest xmlns:android="http://schemas.android.com/apk/res/android">
 
     <application
         android:allowBackup="true"
         android:icon="@drawable/ic_power"
-        android:label="Volume Screen Control"
-        android:theme="@style/Theme.AppCompat.Light.DarkActionBar">
+        android:label="@string/app_name"
+        android:theme="@style/Theme.VolumeButtonScreenControl">
 
-        <!-- Main Screen -->
+        <!-- Main Activity -->
         <activity
             android:name=".MainActivity"
             android:exported="true">
+
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
+
         </activity>
 
-        <!-- About Developer Screen -->
-        <activity android:name=".AboutActivity" />
+        <!-- About Activity -->
+        <activity
+            android:name=".AboutActivity"
+            android:exported="false" />
 
         <!-- Accessibility Service -->
         <service
-            android:name=".VolumeScreenService"
+            android:name=".VolumeAccessibilityService"
             android:permission="android.permission.BIND_ACCESSIBILITY_SERVICE"
             android:exported="true">
+
             <intent-filter>
-                <action android:name="android.accessibilityservice.AccessibilityService" />
+                <action
+                    android:name="android.accessibilityservice.AccessibilityService" />
             </intent-filter>
 
             <meta-data
                 android:name="android.accessibilityservice"
                 android:resource="@xml/accessibility_service_config" />
+
         </service>
 
     </application>
