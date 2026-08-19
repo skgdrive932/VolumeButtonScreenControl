@@ -1,4 +1,4 @@
-package com.example.volumepowerapp
+package com.example.volumescreencontrol
 
 import android.accessibilityservice.AccessibilityService
 import android.content.Context
@@ -6,7 +6,7 @@ import android.os.PowerManager
 import android.view.KeyEvent
 import android.view.accessibility.AccessibilityEvent
 
-class VolumeScreenService : AccessibilityService() {
+class VolumeAccessibilityService : AccessibilityService() {
 
     private var wakeLock: PowerManager.WakeLock? = null
 
@@ -24,7 +24,7 @@ class VolumeScreenService : AccessibilityService() {
             when (keyCode) {
                 KeyEvent.KEYCODE_VOLUME_UP, KeyEvent.KEYCODE_VOLUME_DOWN -> {
                     toggleScreen()
-                    return true // Key press consume ho gayi
+                    return true
                 }
             }
         }
@@ -37,15 +37,16 @@ class VolumeScreenService : AccessibilityService() {
 
         if (!isScreenOn) {
             // Screen OFF hai -> ON karein
+            @Suppress("DEPRECATION")
             wakeLock = powerManager.newWakeLock(
-                PowerManager.SCREEN_BRIGHT_WAKE_LOCK or 
-                PowerManager.ACQUIRE_CAUSES_WAKEUP or 
+                PowerManager.FULL_WAKE_LOCK or
+                PowerManager.ACQUIRE_CAUSES_WAKEUP or
                 PowerManager.ON_AFTER_RELEASE,
                 "VolumeScreenControl:WakeLock"
             )
-            wakeLock?.acquire(5000) // 5 sec ke liye screen ON rakhega
+            wakeLock?.acquire(3000)
         } else {
-            // Screen ON hai -> OFF (Lock) karein
+            // Screen ON hai -> Lock karein
             performGlobalAction(GLOBAL_ACTION_LOCK_SCREEN)
         }
     }
