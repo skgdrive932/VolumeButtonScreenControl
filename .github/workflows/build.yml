@@ -18,7 +18,7 @@ jobs:
         java-version: '17'
         distribution: 'temurin'
 
-    # Gradle automatically setup aur build karega bina gradlew file ke
+    # Yeh step GitHub khud handle kar lega
     - name: Setup Gradle
       uses: gradle/actions/setup-gradle@v3
 
