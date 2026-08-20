@@ -1,64 +1,9 @@
-package com.example.volumescreencontrol
-
-import android.accessibilityservice.AccessibilityService
-import android.content.Context
-import android.os.PowerManager
-import android.view.KeyEvent
-import android.view.accessibility.AccessibilityEvent
-import android.widget.Toast
-
-class VolumeAccessibilityService : AccessibilityService() {
-
-    private var wakeLock: PowerManager.WakeLock? = null
-
-    override fun onAccessibilityEvent(event: AccessibilityEvent?) {}
-
-    override fun onInterrupt() {}
-
-    override fun onKeyEvent(event: KeyEvent?): Boolean {
-        if (event == null) return super.onKeyEvent(event)
-
-        val action = event.action
-        val keyCode = event.keyCode
-
-        if (action == KeyEvent.ACTION_DOWN) {
-            when (keyCode) {
-                KeyEvent.KEYCODE_VOLUME_UP, KeyEvent.KEYCODE_VOLUME_DOWN -> {
-                    toggleScreen()
-                    return true
-                }
-            }
-        }
-        return super.onKeyEvent(event)
-    }
-
-    private fun toggleScreen() {
-        val powerManager = getSystemService(Context.POWER_SERVICE) as PowerManager
-        val isScreenOn = powerManager.isInteractive
-
-        // DEBUGGING: Yeh popup batayega ki button press detect ho raha hai ya nahi
-        Toast.makeText(this, "Button Pressed!", Toast.LENGTH_SHORT).show()
-
-        if (!isScreenOn) {
-            // Screen OFF hai -> ON karein
-            @Suppress("DEPRECATION")
-            wakeLock = powerManager.newWakeLock(
-                PowerManager.FULL_WAKE_LOCK or
-                PowerManager.ACQUIRE_CAUSES_WAKEUP or
-                PowerManager.ON_AFTER_RELEASE,
-                "VolumeScreenControl:WakeLock"
-            )
-            wakeLock?.acquire(3000)
-        } else {
-            // Screen ON hai -> Lock karein
-            performGlobalAction(GLOBAL_ACTION_LOCK_SCREEN)
-        }
-    }
-
-    override fun onDestroy() {
-        super.onDestroy()
-        if (wakeLock?.isHeld == true) {
-            wakeLock?.release()
-        }
-    }
-}
+<?xml version="1.0" encoding="utf-8"?>
+<accessibility-service xmlns:android="http://schemas.android.com/apk/res/android"
+    android:accessibilityEventTypes="typeAllMask"
+    android:accessibilityFeedbackType="feedbackGeneric"
+    android:accessibilityFlags="flagDefault|flagRequestFilterKeyEvents"
+    android:canRequestFilterKeyEvents="true"
+    android:canRetrieveWindowContent="false"
+    android:description="@string/app_name"
+    android:notificationTimeout="100" />
