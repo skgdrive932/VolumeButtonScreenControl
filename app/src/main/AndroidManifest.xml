@@ -1,73 +1,43 @@
 <?xml version="1.0" encoding="utf-8"?>
-
 <manifest xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <!-- Required for screen wake functionality -->
-    <uses-permission android:name="android.permission.WAKE_LOCK" />
-
-    <!-- Required for turning screen on -->
-    <uses-permission android:name="android.permission.TURN_SCREEN_ON" />
-
+    <!-- Screen OFF me Volume Key Intercept karne ke liye -->
+    <uses-permission android.permission.SET_VOLUME_KEY_LONG_PRESS_LISTENER />
+    
+    <!-- Screen Wake Lock ke liye -->
+    <uses-permission android.permission.WAKE_LOCK />
 
     <application
         android:allowBackup="true"
-        android:icon="@drawable/ic_power"
-        android:label="Volume Screen Control"
-        android:theme="@style/Theme.VolumeButtonScreenControl">
+        android:icon="@mipmap/ic_launcher"
+        android:label="@string/app_name"
+        android:roundIcon="@mipmap/ic_launcher_round"
+        android:supportsRtl="true"
+        android:theme="@style/Theme.VolumeScreenControl">
 
-
-        <!-- Main application screen -->
+        <!-- Main Activity -->
         <activity
-            android:name="com.example.volumescreencontrol.MainActivity"
+            android:name=".MainActivity"
             android:exported="true">
-
             <intent-filter>
-
-                <action
-                    android:name="android.intent.action.MAIN" />
-
-                <category
-                    android:name="android.intent.category.LAUNCHER" />
-
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
-
         </activity>
 
-
-        <!-- About screen -->
-        <activity
-            android:name="com.example.volumescreencontrol.AboutActivity"
-            android:exported="false" />
-
-
-        <!--
-            Transparent Activity used only to wake
-            the device display when Volume Up is pressed.
-        -->
-        <activity
-            android:name="com.example.volumescreencontrol.WakeActivity"
-            android:exported="false"
-            android:excludeFromRecents="true"
-            android:theme="@style/WakeTheme" />
-
-
-        <!-- Accessibility Service -->
+        <!-- Accessibility Service Configuration -->
         <service
-            android:name="com.example.volumescreencontrol.VolumeAccessibilityService"
-            android:permission="android.permission.BIND_ACCESSIBILITY_SERVICE"
-            android:exported="false">
-
+            android:name=".VolumeAccessibilityService"
+            android:exported="true"
+            android:label="@string/app_name"
+            android:permission="android.permission.BIND_ACCESSIBILITY_SERVICE">
             <intent-filter>
-
-                <action
-                    android:name="android.accessibilityservice.AccessibilityService" />
-
+                <action android:name="android.accessibilityservice.AccessibilityService" />
             </intent-filter>
 
             <meta-data
                 android:name="android.accessibilityservice"
                 android:resource="@xml/accessibility_service_config" />
-
         </service>
 
     </application>
