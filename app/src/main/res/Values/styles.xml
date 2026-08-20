@@ -2,17 +2,24 @@
 
 <resources>
 
-    <style
-        name="AppTheme"
+    <style name="AppTheme"
         parent="android:style/Theme.Material.Light.NoActionBar">
 
-        <item name="android:fontFamily">
-            sans
-        </item>
+        <item name="android:fontFamily">sans</item>
+        <item name="android:colorAccent">#3F51B5</item>
 
-        <item name="android:colorAccent">
-            #3F51B5
-        </item>
+    </style>
+
+    <style name="WakeTheme"
+        parent="android:style/Theme.Material.Light.NoActionBar">
+
+        <!-- Transparent activity -->
+        <item name="android:windowIsTranslucent">true</item>
+        <item name="android:windowBackground">@android:color/transparent</item>
+        <item name="android:windowNoTitle">true</item>
+
+        <!-- Don't show a visible UI -->
+        <item name="android:windowIsFloating">false</item>
 
     </style>
 
