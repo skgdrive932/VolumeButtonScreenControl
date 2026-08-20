@@ -39,7 +39,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
 
-        android:text="Email: your-email@gmail.com"
+        android:text="Email: skgdrive932@gmail.com"
 
         android:textSize="18sp"
 
@@ -50,7 +50,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
 
-        android:text="Contact: +91 XXXXXXXXXX"
+        android:text="Contact: +91 9779371866"
 
         android:textSize="18sp"
 
