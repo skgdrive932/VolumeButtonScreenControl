@@ -5,27 +5,33 @@ import android.content.Context
 import android.os.PowerManager
 import android.view.KeyEvent
 import android.view.accessibility.AccessibilityEvent
+import android.widget.Toast
 
 class VolumeAccessibilityService : AccessibilityService() {
 
     private var wakeLock: PowerManager.WakeLock? = null
 
-    override fun onAccessibilityEvent(event: AccessibilityEvent?) {}
+    override fun onCreate() {
+        super.onCreate()
+        // Screen OFF me CPU ko awake rakhne ke liye PARTIAL_WAKE_LOCK
+        val powerManager = getSystemService(Context.POWER_SERVICE) as PowerManager
+        wakeLock = powerManager.newWakeLock(
+            PowerManager.PARTIAL_WAKE_LOCK,
+            "VolumeScreenControl:KeepAlive"
+        )
+        wakeLock?.acquire()
+    }
 
+    override fun onAccessibilityEvent(event: AccessibilityEvent?) {}
     override fun onInterrupt() {}
 
     override fun onKeyEvent(event: KeyEvent?): Boolean {
-        if (event == null) return super.onKeyEvent(event)
+        if (event == null) return false
 
-        val action = event.action
-        val keyCode = event.keyCode
-
-        if (action == KeyEvent.ACTION_DOWN) {
-            when (keyCode) {
-                KeyEvent.KEYCODE_VOLUME_UP, KeyEvent.KEYCODE_VOLUME_DOWN -> {
-                    toggleScreen()
-                    return true
-                }
+        if (event.keyCode == KeyEvent.KEYCODE_VOLUME_UP || event.keyCode == KeyEvent.KEYCODE_VOLUME_DOWN) {
+            if (event.action == KeyEvent.ACTION_DOWN) {
+                toggleScreen()
+                return true
             }
         }
         return super.onKeyEvent(event)
@@ -36,17 +42,15 @@ class VolumeAccessibilityService : AccessibilityService() {
         val isScreenOn = powerManager.isInteractive
 
         if (!isScreenOn) {
-            // Screen OFF hai -> ON karein
             @Suppress("DEPRECATION")
-            wakeLock = powerManager.newWakeLock(
+            val screenWake = powerManager.newWakeLock(
                 PowerManager.FULL_WAKE_LOCK or
                 PowerManager.ACQUIRE_CAUSES_WAKEUP or
                 PowerManager.ON_AFTER_RELEASE,
-                "VolumeScreenControl:WakeLock"
+                "VolumeScreenControl:WakeScreen"
             )
-            wakeLock?.acquire(3000)
+            screenWake.acquire(3000)
         } else {
-            // Screen ON hai -> Lock karein
             performGlobalAction(GLOBAL_ACTION_LOCK_SCREEN)
         }
     }
