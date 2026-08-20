@@ -2,24 +2,52 @@
 
 <resources>
 
-    <style name="AppTheme"
+
+    <!--
+        Normal application theme
+    -->
+    <style
+        name="AppTheme"
         parent="android:style/Theme.Material.Light.NoActionBar">
 
         <item name="android:fontFamily">sans</item>
-        <item name="android:colorAccent">#3F51B5</item>
+
+        <item name="android:colorAccent">
+            #3F51B5
+        </item>
 
     </style>
 
-    <style name="WakeTheme"
+
+    <!--
+        Transparent theme for WakeActivity.
+
+        WakeActivity has no visible UI.
+        It exists only to wake the screen.
+    -->
+    <style
+        name="WakeTheme"
         parent="android:style/Theme.Material.Light.NoActionBar">
 
-        <!-- Transparent activity -->
-        <item name="android:windowIsTranslucent">true</item>
-        <item name="android:windowBackground">@android:color/transparent</item>
-        <item name="android:windowNoTitle">true</item>
+        <item name="android:windowIsTranslucent">
+            true
+        </item>
 
-        <!-- Don't show a visible UI -->
-        <item name="android:windowIsFloating">false</item>
+        <item name="android:windowBackground">
+            @android:color/transparent
+        </item>
+
+        <item name="android:windowNoTitle">
+            true
+        </item>
+
+        <item name="android:backgroundDimEnabled">
+            false
+        </item>
+
+        <item name="android:windowDisablePreview">
+            true
+        </item>
 
     </style>
 
