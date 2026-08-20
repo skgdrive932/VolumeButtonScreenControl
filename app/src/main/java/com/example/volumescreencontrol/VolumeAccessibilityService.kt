@@ -1,60 +1,79 @@
 package com.example.volumescreencontrol
 
 import android.accessibilityservice.AccessibilityService
-import android.content.Context
-import android.os.PowerManager
+import android.content.Intent
 import android.view.KeyEvent
 import android.view.accessibility.AccessibilityEvent
-import android.widget.Toast
 
 class VolumeAccessibilityService : AccessibilityService() {
 
-    private var lastAction = 0L
-    private val debounceMs = 500L
+    private var lastKeyTime = 0L
+    private val debounceTime = 300L
 
     override fun onServiceConnected() {
         super.onServiceConnected()
-        Toast.makeText(this, "Volume Screen Control is active", Toast.LENGTH_SHORT).show()
     }
 
-    override fun onAccessibilityEvent(event: AccessibilityEvent?) = Unit
+    override fun onAccessibilityEvent(event: AccessibilityEvent?) {
+        // Nothing required here
+    }
 
-    override fun onInterrupt() = Unit
+    override fun onInterrupt() {
+        // Nothing required here
+    }
 
     override fun onKeyEvent(event: KeyEvent): Boolean {
-        val isVolumeKey = event.keyCode == KeyEvent.KEYCODE_VOLUME_UP ||
-                event.keyCode == KeyEvent.KEYCODE_VOLUME_DOWN
 
-        if (!isVolumeKey) return false
+        if (event.action != KeyEvent.ACTION_DOWN) {
+            return false
+        }
 
-        // Consume both DOWN and UP so Android does not also change the volume.
-        if (event.action == KeyEvent.ACTION_DOWN) {
-            val now = System.currentTimeMillis()
-            if (now - lastAction >= debounceMs) {
-                lastAction = now
-                when (event.keyCode) {
-                    KeyEvent.KEYCODE_VOLUME_UP -> wakeScreen()
-                    KeyEvent.KEYCODE_VOLUME_DOWN -> lockScreen()
-                }
+        val now = System.currentTimeMillis()
+
+        if (now - lastKeyTime < debounceTime) {
+            return true
+        }
+
+        lastKeyTime = now
+
+        when (event.keyCode) {
+
+            KeyEvent.KEYCODE_VOLUME_UP -> {
+
+                wakeScreen()
+
+                // Volume Up ko normal volume button action
+                // ke liye pass mat karo.
+                return true
+            }
+
+            KeyEvent.KEYCODE_VOLUME_DOWN -> {
+
+                // Screen OFF / LOCK
+                performGlobalAction(GLOBAL_ACTION_LOCK_SCREEN)
+
+                return true
             }
         }
-        return true
+
+        return false
     }
 
     private fun wakeScreen() {
-        val pm = getSystemService(Context.POWER_SERVICE) as PowerManager
-        @Suppress("DEPRECATION")
-        val lock = pm.newWakeLock(
-            PowerManager.SCREEN_BRIGHT_WAKE_LOCK or
-                    PowerManager.ACQUIRE_CAUSES_WAKEUP or
-                    PowerManager.ON_AFTER_RELEASE,
-            "VolumeScreenControl:WakeScreen"
-        )
-        lock.acquire(3000L)
-        lock.release()
-    }
 
-    private fun lockScreen() {
-        performGlobalAction(GLOBAL_ACTION_LOCK_SCREEN)
+        try {
+            val intent = Intent(this, WakeActivity::class.java)
+
+            intent.addFlags(
+                Intent.FLAG_ACTIVITY_NEW_TASK or
+                Intent.FLAG_ACTIVITY_NO_ANIMATION or
+                Intent.FLAG_ACTIVITY_EXCLUDE_FROM_RECENTS
+            )
+
+            startActivity(intent)
+
+        } catch (e: Exception) {
+            e.printStackTrace()
+        }
     }
 }
