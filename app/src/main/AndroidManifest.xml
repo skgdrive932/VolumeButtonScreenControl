@@ -1,10 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <!-- Screen OFF me Volume Key Intercept karne ke liye -->
     <uses-permission android.permission.SET_VOLUME_KEY_LONG_PRESS_LISTENER />
-    
-    <!-- Screen Wake Lock ke liye -->
     <uses-permission android.permission.WAKE_LOCK />
 
     <application
@@ -15,7 +12,6 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.VolumeScreenControl">
 
-        <!-- Main Activity -->
         <activity
             android:name=".MainActivity"
             android:exported="true">
@@ -25,7 +21,6 @@
             </intent-filter>
         </activity>
 
-        <!-- Accessibility Service Configuration -->
         <service
             android:name=".VolumeAccessibilityService"
             android:exported="true"
