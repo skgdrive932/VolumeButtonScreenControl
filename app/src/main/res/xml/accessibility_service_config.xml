@@ -1,9 +1,60 @@
-<?xml version="1.0" encoding="utf-8"?>
-<accessibility-service xmlns:android="http://schemas.android.com/apk/res/android"
-    android:accessibilityEventTypes="typeAllMask"
-    android:accessibilityFeedbackType="feedbackGeneric"
-    android:accessibilityFlags="flagDefault|flagRequestFilterKeyEvents"
-    android:canRequestFilterKeyEvents="true"
-    android:canRetrieveWindowContent="false"
-    android:description="@string/app_name"
-    android:notificationTimeout="100" />
+package com.example.volumescreencontrol
+
+import android.accessibilityservice.AccessibilityService
+import android.content.Context
+import android.os.PowerManager
+import android.view.KeyEvent
+import android.view.accessibility.AccessibilityEvent
+import android.widget.Toast
+
+class VolumeAccessibilityService : AccessibilityService() {
+
+    private var wakeLock: PowerManager.WakeLock? = null
+
+    override fun onAccessibilityEvent(event: AccessibilityEvent?) {}
+
+    override fun onInterrupt() {}
+
+    override fun onKeyEvent(event: KeyEvent?): Boolean {
+        if (event == null) return false
+
+        // Volume buttons ko intercept karein
+        if (event.keyCode == KeyEvent.KEYCODE_VOLUME_UP || event.keyCode == KeyEvent.KEYCODE_VOLUME_DOWN) {
+            if (event.action == KeyEvent.ACTION_DOWN) {
+                toggleScreen()
+                return true // 'true' return karne se system sound bar nahi dikhayega
+            }
+        }
+        return super.onKeyEvent(event)
+    }
+
+    private fun toggleScreen() {
+        val powerManager = getSystemService(Context.POWER_SERVICE) as PowerManager
+        val isScreenOn = powerManager.isInteractive
+
+        // DEBUGGING: Test popup
+        Toast.makeText(this, "Button Pressed!", Toast.LENGTH_SHORT).show()
+
+        if (!isScreenOn) {
+            // Screen OFF hai -> Turn ON
+            @Suppress("DEPRECATION")
+            wakeLock = powerManager.newWakeLock(
+                PowerManager.FULL_WAKE_LOCK or
+                PowerManager.ACQUIRE_CAUSES_WAKEUP or
+                PowerManager.ON_AFTER_RELEASE,
+                "VolumeScreenControl:WakeLock"
+            )
+            wakeLock?.acquire(3000)
+        } else {
+            // Screen ON hai -> Lock Screen
+            performGlobalAction(GLOBAL_ACTION_LOCK_SCREEN)
+        }
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        if (wakeLock?.isHeld == true) {
+            wakeLock?.release()
+        }
+    }
+}
