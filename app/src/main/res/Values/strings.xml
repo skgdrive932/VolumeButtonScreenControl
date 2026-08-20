@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Volume Screen Control</string>
+    <string name="developer_name">SK Kaushal</string>
+    <string name="developer_email">skgdrive932@gmail.com</string>
+    <string name="developer_contact">+91 9779371866</string>
+    <string name="accessibility_description">Allows volume buttons to control screen wake and lock.</string>
+</resources>
