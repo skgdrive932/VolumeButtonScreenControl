@@ -13,16 +13,18 @@ class WakeActivity : Activity() {
         setShowWhenLocked(true)
         setTurnScreenOn(true)
 
-        // Older Android compatibility
+        // Older Android versions
+        @Suppress("DEPRECATION")
         window.addFlags(
             WindowManager.LayoutParams.FLAG_SHOW_WHEN_LOCKED or
-            WindowManager.LayoutParams.FLAG_TURN_SCREEN_ON or
-            WindowManager.LayoutParams.FLAG_DISMISS_KEYGUARD
+                    WindowManager.LayoutParams.FLAG_TURN_SCREEN_ON or
+                    WindowManager.LayoutParams.FLAG_DISMISS_KEYGUARD
         )
 
-        // Transparent activity ko immediately close kar do.
+        // No visible UI is required.
+        // Activity starts only to wake the display.
         window.decorView.postDelayed({
             finish()
-        }, 150)
+        }, 200)
     }
 }
